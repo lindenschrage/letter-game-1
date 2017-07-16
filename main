@@ -1,0 +1,114 @@
+import random
+import sys
+
+def playAgain():
+    user = input("Would you like to play again? Y/n ")
+    if user.lower() == "n":
+        sys.exit(1)
+    else:
+        game(10)
+
+
+def getHelp():
+        print("""
+        Guess a letter (A-Z). You have 10 letter guesses.
+        Enter 'GUESS' to guess a word. You have 3 word guesses.
+        Enter 'QUIT' to quit the game.
+        Enter 'HELP' to see this help instruction menu. 
+        """)
+
+
+def game(countNumber):
+    getHelp()
+    #make a list of words
+    string = "abbreviation abbreviations abettor abettors abilities ability abrasion abrasions abrasive abrasives absence absences abuse abuser abusers abuses acceleration accelerations acceptance acceptances acceptor acceptors access accesses accessories accessory accident accidents accommodation accomplishment accomplishments accord accordance account accountabilities accountability accounts accrual accruals accruement accumulation accumulations accuracy accusation accusations acid acids acquisition acquisitions acquittal acquittals acre acres acronym acronyms act action actions activities activity acts adaption adaptions addition additions additive animals annex annexs answer answers antenna antennas anthem anthems anticipation apostrophe apostrophes apparatus apparatuses appeal appeals appearance appearances appellate apple apples applicant applicants application beginners behavior behaviors being beings belief beliefs bell bells belt belts bench benches bend bends blazes blindfold blinks blood blots blowblower blowers chairman chairwoman chalk chalks challenge chamber chance change channel channels chaplain chaplains chapter chapters character chill chills chimney chimneys chin chins chip chips drains drawer drawers drawings dress dresses drift drifts drill driller drillers drills drink drinks drip editors education educator educators effect effectiveness effects efficiencies efficiency effort efforts egg eggs eighths eighties eights ejection elapse elapses elbow eligibility margins marines mark market markets marks mask masks mass massed masses mast master officials offsets  oil okays ones openings operabilities operability operand operands portion portions ports position positions possession possessions possibilities possibility post posts pot potato potatos pots pound pounds receptacle receptacles recess recesses recipient recombination spacer spacers spaces spade spades span spans spar spare  spares spark sparks spars speaker speakers spear spears specialist specialists specialization specializations specialties specialty specification specifications speech speeches speed speeder speeders speeds spike spikes splices splint splints splitter splitters spokespokes squadron squadrons square squares squeak squeaks stability stabilization stack troubleshooter trousers truck trucks trunk trunks trust trusts truth truths try tub tube tubes tubing tubs tuesday tuesdays tug tugs tuition tumble tumbles tune tunes tunnel tunnels turbine turbines turbulence turn turnaround turnarounds turns turpitude twenties twig twigs twin twine twins twirl twirls twist twists twostype types typewriter typewriters typist typists umbrella uncertainties uncertainty uniform uniforms union unions unit units universe update updates upside usage usages use user users uses utilities utility utilization utilizations vacuum vacuums validation validations valley valleys value values valve valves vapor vapors varactor varactors variables variation variations varieties variety vector vectors vehicle vehicles velocities velocity vendor violationviolet vouchers wafer wafers wage wages wagon wagon waist walls want war wardroom wardrooms warehouse warehouses warfare warning warnings warranties warranty wars warship warships wartime wash washer washers washes washing washtub watts wave waves wax waxes way ways wayside weapon weapons wear weather weathers weave worm worms worries worry worth wounds wrap wraps wreck wrecks wrench wrenches wrist wrists writer writers writing writings yard yards yarn yarns yaw yaws year years yell yells yields yolk yolks zeros zips zone zones can may accounting bearing bracing briefing coupling damping ending engineering feeling heading meaning rating rigging schooling sizing"
+
+    wordList = string.split(" ")
+
+#pick a random word
+    randInt = random.randint(0, len(wordList)-1)
+    randomWord = wordList[randInt]
+#draw spaces for letters
+    for letter in randomWord:
+        print("_", end = " ")
+    
+#take a guess
+    mistakesList = []  
+    mistakeCounter = 0
+    newList = []
+    wordGuess = 0
+    while mistakeCounter < countNumber:
+        user = input("""
+What letter would you like to guess? """).lower()
+        pretendList = []
+        if user.isalpha() and len(user) == 1:
+            if user in mistakesList or user in newList:
+                print("You've already guessed {}.".format(user))
+            
+            elif user in randomWord:
+                print("{} is in the word".format(user))
+                newList.append(user)
+                for letter in randomWord:
+                    if letter == user:
+                        print(letter, end=" ")
+                        pretendList.append(letter)
+                    elif letter in newList:
+                        print(letter, end=" ")
+                        pretendList.append(letter)
+                    else:
+                        print("_", end = " ")
+                print ("Strikes: {}".format(mistakesList))
+                if ''.join(pretendList) == randomWord:
+                    print("Congratulations! You guessed correctly. The word was {}.".format(randomWord))
+                    playAgain()
+                
+            
+            else:
+                mistakesList.append(user)
+                mistakeCounter+=1
+                print("{} is not in the word".format(user))
+                for letter in randomWord:
+                    if letter == user:
+                        print(letter, end=" ")
+                    elif letter in newList:
+                        print(letter, end=" ")
+                    else:
+                        print("_", end = " ")
+                print ("Strikes: {}".format(mistakesList))
+            
+        elif user.lower() == "guess":
+            userInput = input("What word would you like to guess? (Guess {}/3)".format(wordGuess+1)).lower()
+            if userInput.lower() == randomWord:
+                print("Congratulations! You guessed correctly. The word was {}.".format(randomWord))
+                playAgain()     
+            else:
+                wordGuess+=1
+                print("Sorry! {} is not correct.".format(userInput))
+                for letter in randomWord:
+                    if letter == user:
+                        print(letter, end=" ")
+                    elif letter in newList:
+                        print(letter, end=" ")
+                    else:
+                        print("_", end = " ")
+                print ("Strikes: {}".format(mistakesList))
+                if wordGuess == 3:
+                    print("You have run out of guesses. The word was {}.".format(randomWord))
+                    playAgain()
+                continue
+        elif user.lower() == "help":
+            getHelp()
+        elif user.lower() == "quit":
+            print("Bye!")
+            return None
+            sys.exit(1)
+
+        else:
+            print("That is not a valid input.")
+    print("You have run out of guesses. The word was {}.".format(randomWord))
+    playAgain()
+game(10)
+        
+
+#draw guessed letters and strikes
+#print out win/lose
